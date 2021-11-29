@@ -18,13 +18,13 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-degday provides formulas for estimating [degree days](https://en.wikipedia.org/wiki/Growing_degree-day) from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the growth of plants and insects. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as provide a species-specific temperature range in which development occurs.
+**degday** provides formulas for estimating [degree days](https://en.wikipedia.org/wiki/Growing_degree-day) from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the growth of plants and insects. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as provide a species-specific temperature range in which development occurs.
 
-Formulas are based on the work by Zalom et al ([1983](#references)). These same formula are used on the [UC Integrated Pest Management](http://ipm.ucanr.edu/WEATHER/) (UC IPM) website. See the UC IPM website for additional background on [degree days](http://ipm.ucanr.edu/WEATHER/ddconcepts.html), [detailed figures and formulas](http://ipm.ucanr.edu/WEATHER/ddfigindex.html), and [models](http://www.ipm.ucdavis.edu/MODELS/) that predict growth stages of various crops and pests based on degree days.
+Formulas are based on the work by Zalom et al ([1983](#references)). These same formulas are used on the [UC Integrated Pest Management](http://ipm.ucanr.edu/WEATHER/) (UC IPM) website. See the UC IPM website for additional background on [degree days](http://ipm.ucanr.edu/WEATHER/ddconcepts.html), [detailed figures and formulas](http://ipm.ucanr.edu/WEATHER/ddfigindex.html), and [models](http://www.ipm.ucdavis.edu/MODELS/) that predict growth stages of various crops and pests based on degree days.
 
-degday implements all the formula in Zalom et. al., including the single and double triangle methods, the single and double sine methods, and the simple average method. All formula use the horizontal cutoff method. It does not currently support the vertical cutoff method, nor the corrected sine and triangle methods. 
+degday implements all the formulas in Zalom et al ([1983](#references)), including the single and double triangle methods, the single and double sine methods, and the simple average method. All formulas use the horizontal cutoff method. degday does not currently support the vertical cutoff method, nor the corrected sine and triangle methods. 
 
-Most people compute degree days in order to lookup when a development milestone such as flower blooming or adult emergence is expected. You should use whichever method of degree days referenced in the lookup table. When in doubt, use the single-sine method.
+You might be wondering which of the four estimation methods to use? Most people compute degree days not as an end in itself, but rather to look-up when a development milestone, such as blooming in a plant or larvae emergence in an insect, is expected. Hence you should use whichever method of degree days referenced in the lookup table. When in doubt, use the single-sine method. For more info about the different methods, see Roltsch et al ([1999](#references)).
 
 Degree days are sometimes referred to as *growing degree days*, which generally refers to data that drives models of specifically plant growth. Other terms that are more or less synonymous with degree days are *heat units* and *thermal units*. *Chill hours* is a related concept, but uses accumulated cold to predict plant and insect development rather than accumulated heat. Formulas for computing chill hours and chill portions may be found in [chillR](https://cran.r-project.org/package=chillR).
 
@@ -93,5 +93,7 @@ espartoa_dd2 %>% head()
 
 # References {#references}
 
-Zalom, F.G., P.B. Goodell, L.T. Wilson, W.W. Barnett, and W.J. Bentley (1983). Degree-days: The calculation and use of heat units in pest management. UC DANR Leaflet 21373. Available from [Hathi Trust](https://catalog.hathitrust.org/Record/008707238).
+Zalom, F.G., P.B. Goodell, L.T. Wilson, W.W. Barnett, and W.J. Bentley. 1983. *Degree-days: The calculation and use of heat units in pest management*. UC DANR Leaflet 21373. Available from [Hathi Trust](https://catalog.hathitrust.org/Record/008707238).
+
+Roltsch, W. J.; Zalom, F. G.; Strawn, A. J.; Strand, J. F.; Pitcairn, M. J. 1999. *Evaluation of several degree-day estimation methods in California climates*. Int. J. Biometeorol. 42:169-176. [https://doi.org/10.1007/s004840050101](https://doi.org/10.1007/s004840050101)
 
