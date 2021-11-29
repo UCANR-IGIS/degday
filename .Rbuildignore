@@ -1,0 +1,10 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^README\.Rmd$
+^README_cache$
+^LICENSE\.md$
+^docs$
+^doc$
+^_pkgdown\.yml$
+^pkgdown$
+^Meta$
