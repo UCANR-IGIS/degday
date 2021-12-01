@@ -3,7 +3,7 @@ Type: Package
 Title: Compute Degree Days
 Version: 0.1.0
 Date: 2021-11-28
-Authors@R: c(person(given = "Andy",
+Authors@R: c(person(given = "Andrew",
                   family = "Lyons", 
                   role = c("aut", "cre"),
                   email = "andlyons@ucanr.edu", 
