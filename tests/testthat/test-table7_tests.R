@@ -6,7 +6,7 @@ thresh_low <- 55
 thresh_up <- 90
 
 test_that("single triangle works", {
-  my_gdd <- dd_vals(daily_min = tbl7_df$temp_min,
+  my_gdd <- dd_calc(daily_min = tbl7_df$temp_min,
                      daily_max = tbl7_df$temp_max,
                      thresh_low = thresh_low,
                      thresh_up = thresh_up,
@@ -16,7 +16,7 @@ test_that("single triangle works", {
 })
 
 test_that("double triangle works", {
-  my_gdd <- dd_vals(daily_min = tbl7_df$temp_min,
+  my_gdd <- dd_calc(daily_min = tbl7_df$temp_min,
                      daily_max = tbl7_df$temp_max,
                      nextday_min = tbl7_df$temp_nextmin,
                      thresh_low = thresh_low,
@@ -29,7 +29,7 @@ test_that("double triangle works", {
 })
 
 test_that("single sine works", {
-  my_gdd <- dd_vals(daily_min = tbl7_df$temp_min,
+  my_gdd <- dd_calc(daily_min = tbl7_df$temp_min,
                      daily_max = tbl7_df$temp_max,
                      thresh_low = thresh_low,
                      thresh_up = thresh_up,
@@ -39,7 +39,7 @@ test_that("single sine works", {
 })
 
 test_that("double sine works", {
-  my_gdd <- dd_vals(daily_min = tbl7_df$temp_min,
+  my_gdd <- dd_calc(daily_min = tbl7_df$temp_min,
                      daily_max = tbl7_df$temp_max,
                      nextday_min = tbl7_df$temp_nextmin,
                      thresh_low = thresh_low,

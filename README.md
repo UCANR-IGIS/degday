@@ -103,6 +103,8 @@ espartoa_dd <- espartoa_temp %>%
                               thresh_low = thresh_low, thresh_up = thresh_up),
          sng_sine = dd_sng_sine(daily_min = tmin, daily_max = tmax, 
                                 thresh_low = thresh_low, thresh_up = thresh_up))
+#>  - using single triangle method
+#>  - using single sine method
 
 espartoa_dd %>% head()
 #>     station       date tmin tmax   sng_tri  sng_sine
@@ -147,6 +149,8 @@ espartoa_dd2 <- espartoa_temp2 %>%
                               thresh_low = thresh_low, thresh_up = thresh_up),
          dbl_sine = dd_dbl_sine(daily_min = tmin, daily_max = tmax, nextday_min = tmin_next,
                                 thresh_low = thresh_low, thresh_up = thresh_up))
+#>  - using double triangle method
+#>  - using double sine method
 
 espartoa_dd2 %>% head()
 #>     station       date tmin tmax tmin_next   dbl_tri  dbl_sine
@@ -160,7 +164,9 @@ espartoa_dd2 %>% head()
 
 # References
 
-Zalom, F.G., P.B. Goodell, L.T. Wilson, W.W. Barnett, and W.J. Bentley. 1983. *Degree-days: The calculation and use of heat units in pest management*. UC DANR Leaflet 21373. Available from [Hathi
+Zalom, F.G., P.B. Goodell, L.T. Wilson, W.W. Barnett, and W.J. Bentley.
+1983. *Degree-days: The calculation and use of heat units in pest
+management*. UC DANR Leaflet 21373. Available from [Hathi
 Trust](https://catalog.hathitrust.org/Record/008707238).
 
 Roltsch, W. J.; Zalom, F. G.; Strawn, A. J.; Strand, J. F.; Pitcairn, M.
