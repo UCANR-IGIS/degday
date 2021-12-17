@@ -18,6 +18,6 @@ install.packages(pkg_missing, dependencies = TRUE)
 
 remotes::install_github("ucanr-igis/degday")
 
-## Run the Navel Orangeworm Degree Day app
+## Run the Navel Orangeworm Degree Day app locally
 
-shiny::runUrl( "<the weblink>")
+shiny::runUrl("https://github.com/ucanr-igis/degday/raw/master/scripts/noworm.2021-12-16.zip")
