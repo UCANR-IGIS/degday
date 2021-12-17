@@ -9,3 +9,4 @@
 ^pkgdown$
 ^Meta$
 ^data-raw$
+^scripts$
