@@ -101,12 +101,12 @@ adjacent values.
 }
 \section{Functions}{
 \itemize{
-\item \code{dd_sng_tri}: Compute degree days using the single-triangle method
+\item \code{dd_sng_tri()}: Compute degree days using the single-triangle method
 
-\item \code{dd_sng_sine}: Compute degree days using the single-sine method
+\item \code{dd_sng_sine()}: Compute degree days using the single-sine method
 
-\item \code{dd_dbl_tri}: Compute degree days using the double-triangle method
+\item \code{dd_dbl_tri()}: Compute degree days using the double-triangle method
 
-\item \code{dd_dbl_sine}: Compute degree days using the double-sine method
+\item \code{dd_dbl_sine()}: Compute degree days using the double-sine method
+
 }}
-

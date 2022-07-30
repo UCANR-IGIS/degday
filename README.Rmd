@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-**degday** provides formulas for estimating [degree days](https://en.wikipedia.org/wiki/Growing_degree-day) from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the growth of plants and insects. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as provide a species-specific temperature range in which development occurs.
+<a href='http://ucanr-igis.github.io/degday'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday** provides formulas for estimating [degree days](https://en.wikipedia.org/wiki/Growing_degree-day) from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the growth of plants and insects. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as provide a species-specific temperature range in which development occurs.
 
 Formulas are based on the work by Zalom et al ([1983](#references)). These same formulas are used on the [UC Integrated Pest Management](http://ipm.ucanr.edu/WEATHER/) (UC IPM) website. See the UC IPM website for additional background on [degree days](http://ipm.ucanr.edu/WEATHER/ddconcepts.html), [detailed figures and formulas](http://ipm.ucanr.edu/WEATHER/ddfigindex.html), and [models](http://www.ipm.ucdavis.edu/MODELS/) that predict growth stages of various crops and pests based on degree days.
 
@@ -30,9 +30,17 @@ Degree days are sometimes referred to as *growing degree days*, which generally 
 
 ## Installation
 
-To install the development version of degday, run the following. Windows users need to have [RTools](https://cran.r-project.org/bin/windows/Rtools/) installed first.
+`degday` is available on [r-universe](https://ajlyons.r-universe.dev/){target="_blank" rel="noopener"}. To install it, you can run:
 
-``` r
+```
+options(repos = c(ajlyons = 'https://ajlyons.r-universe.dev',
+                  CRAN = 'https://cloud.r-project.org'))
+install.packages('degday')
+```
+
+Alternately, you can install it directly from [GitHub](https://github.com/ucanr-igis/degday){target="_blank" rel="noopener"}. (This requires the `remotes` package plus [RTools](https://cran.r-project.org/bin/windows/Rtools/){target="_blank" rel="noopener"} for Windows users.)
+
+```
 remotes::install_github("ucanr-igis/degday")
 ```
 

@@ -8,7 +8,8 @@ Compute Degree Days
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-**degday** provides formulas for estimating [degree
+<a href='http://ucanr-igis.github.io/degday'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday**
+provides formulas for estimating [degree
 days](https://en.wikipedia.org/wiki/Growing_degree-day) from daily
 minimum and maximum temperatures. Degree days are commonly used in
 agriculture to predict the growth of plants and insects. To use the
@@ -50,14 +51,21 @@ hours and chill portions may be found in
 
 ## Installation
 
-To install the development version of degday, run the following. Windows
-users need to have
-[RTools](https://cran.r-project.org/bin/windows/Rtools/) installed
-first.
+`degday` is available on
+<a href="https://ajlyons.r-universe.dev/" target="_blank"
+rel="noopener">r-universe</a>. To install it, you can run:
 
-``` r
-remotes::install_github("ucanr-igis/degday")
-```
+    options(repos = c(ajlyons = 'https://ajlyons.r-universe.dev',
+                      CRAN = 'https://cloud.r-project.org'))
+    install.packages('degday')
+
+Alternately, you can install it directly from
+<a href="https://github.com/ucanr-igis/degday" target="_blank"
+rel="noopener">GitHub</a>. (This requires the `remotes` package plus
+<a href="https://cran.r-project.org/bin/windows/Rtools/" target="_blank"
+rel="noopener">RTools</a> for Windows users.)
+
+    remotes::install_github("ucanr-igis/degday")
 
 ## Example
 
