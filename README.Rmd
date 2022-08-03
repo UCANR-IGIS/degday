@@ -61,6 +61,7 @@ To compute degree days, we have to tell it a range of temperatures in which deve
 
 ```{r thresholds}
 thresh_low <- 55
+thresh_low <- 50
 thresh_up <- 93.9
 ```
 
@@ -78,12 +79,12 @@ espartoa_dd %>% head()
 
 To compute degree days using the double-triangle and double-sine methods, we need to first add a column to our temperature table for the "day after" minimum temperature. That's because these methods use the minimum temperature of the next day to better model cooling in the afternoon and evening hours.
 
-We can add the next-day minimum temperature to our table with a little dplyr. Note this requires us to drop-the final row (because we don't have a next-day temperature for it).
+We can add the next-day minimum temperature to our table with a little dplyr.
 
 ```{r}
 espartoa_temp2 <- espartoa_temp %>%
-  mutate(tmin_next = lead(tmin, n = 1)) %>%
-  slice(-n())
+  mutate(tmin_next = lead(tmin, n = 1))
+
 espartoa_temp2 %>% head()
 ```
 
@@ -98,6 +99,8 @@ espartoa_dd2 <- espartoa_temp2 %>%
 
 espartoa_dd2 %>% head()
 ```
+
+\
 
 # References {#references}
 

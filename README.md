@@ -98,6 +98,7 @@ Orangeworm](http://ipm.ucanr.edu/PHENOLOGY/ma-navel_orangeworm.html).
 
 ``` r
 thresh_low <- 55
+thresh_low <- 50
 thresh_up <- 93.9
 ```
 
@@ -115,13 +116,13 @@ espartoa_dd <- espartoa_temp %>%
 #>  - using single sine method
 
 espartoa_dd %>% head()
-#>     station       date tmin tmax   sng_tri  sng_sine
-#> 1 Esparto.A 2020-01-01   38   55 0.0000000 0.0000000
-#> 2 Esparto.A 2020-01-02   36   67 2.3225806 3.3101298
-#> 3 Esparto.A 2020-01-03   33   59 0.3076923 0.6766645
-#> 4 Esparto.A 2020-01-04   37   59 0.3636364 0.7378844
-#> 5 Esparto.A 2020-01-05   38   63 1.2800000 1.9896042
-#> 6 Esparto.A 2020-01-06   36   58 0.2045455 0.4768866
+#>     station       date tmin tmax sng_tri sng_sine
+#> 1 Esparto.A 2020-01-01   38   55    0.74     1.19
+#> 2 Esparto.A 2020-01-02   36   67    4.66     5.71
+#> 3 Esparto.A 2020-01-03   33   59    1.56     2.34
+#> 4 Esparto.A 2020-01-04   37   59    1.84     2.56
+#> 5 Esparto.A 2020-01-05   38   63    3.38     4.23
+#> 6 Esparto.A 2020-01-06   36   58    1.45     2.13
 ```
 
 To compute degree days using the double-triangle and double-sine
@@ -131,13 +132,12 @@ minimum temperature of the next day to better model cooling in the
 afternoon and evening hours.
 
 We can add the next-day minimum temperature to our table with a little
-dplyr. Note this requires us to drop-the final row (because we don’t
-have a next-day temperature for it).
+dplyr.
 
 ``` r
 espartoa_temp2 <- espartoa_temp %>%
-  mutate(tmin_next = lead(tmin, n = 1)) %>%
-  slice(-n())
+  mutate(tmin_next = lead(tmin, n = 1))
+
 espartoa_temp2 %>% head()
 #>     station       date tmin tmax tmin_next
 #> 1 Esparto.A 2020-01-01   38   55        36
@@ -161,14 +161,16 @@ espartoa_dd2 <- espartoa_temp2 %>%
 #>  - using double sine method
 
 espartoa_dd2 %>% head()
-#>     station       date tmin tmax tmin_next   dbl_tri  dbl_sine
-#> 1 Esparto.A 2020-01-01   38   55        36 0.0000000 0.0000000
-#> 2 Esparto.A 2020-01-02   36   67        33 2.2201139 3.2285910
-#> 3 Esparto.A 2020-01-03   33   59        37 0.3356643 0.7072744
-#> 4 Esparto.A 2020-01-04   37   59        38 0.3722944 0.7469314
-#> 5 Esparto.A 2020-01-05   38   63        36 1.2325926 1.9493055
-#> 6 Esparto.A 2020-01-06   36   58        30 0.1826299 0.4491396
+#>     station       date tmin tmax tmin_next dbl_tri dbl_sine
+#> 1 Esparto.A 2020-01-01   38   55        36    0.70     1.15
+#> 2 Esparto.A 2020-01-02   36   67        33    4.46     5.56
+#> 3 Esparto.A 2020-01-03   33   59        37    1.70     2.45
+#> 4 Esparto.A 2020-01-04   37   59        38    1.88     2.59
+#> 5 Esparto.A 2020-01-05   38   63        36    3.25     4.14
+#> 6 Esparto.A 2020-01-06   36   58        30    1.30     2.00
 ```
+
+  
 
 # References
 

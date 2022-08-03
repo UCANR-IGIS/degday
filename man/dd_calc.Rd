@@ -11,11 +11,12 @@
 dd_calc(
   daily_min,
   daily_max,
-  nextday_min = NULL,
+  nextday_min = daily_min,
   thresh_low = NULL,
   thresh_up = NULL,
   method = c("sng_tri", "dbl_tri", "sng_sine", "dbl_sine", "simp_avg")[0],
-  cutoff = c("horizontal", "vertical")[1],
+  cutoff = c("horizontal", "vertical", "intermediate")[1],
+  digits = 2,
   cumulative = FALSE,
   no_neg = TRUE,
   interpolate_na = FALSE,
@@ -28,6 +29,8 @@ dd_sng_tri(
   daily_max,
   thresh_low = NULL,
   thresh_up = NULL,
+  cutoff = c("horizontal", "vertical", "intermediate")[1],
+  digits = 2,
   cumulative = FALSE
 )
 
@@ -36,24 +39,30 @@ dd_sng_sine(
   daily_max,
   thresh_low = NULL,
   thresh_up = NULL,
+  cutoff = c("horizontal", "vertical", "intermediate")[1],
+  digits = 2,
   cumulative = FALSE
 )
 
 dd_dbl_tri(
   daily_min,
   daily_max,
-  nextday_min = NULL,
+  nextday_min = daily_min,
   thresh_low = NULL,
   thresh_up = NULL,
+  cutoff = c("horizontal", "vertical", "intermediate")[1],
+  digits = 2,
   cumulative = FALSE
 )
 
 dd_dbl_sine(
   daily_min,
   daily_max,
-  nextday_min = NULL,
+  nextday_min = daily_min,
   thresh_low = NULL,
   thresh_up = NULL,
+  cutoff = c("horizontal", "vertical", "intermediate")[1],
+  digits = 2,
   cumulative = FALSE
 )
 }
@@ -71,6 +80,8 @@ dd_dbl_sine(
 \item{method}{The method used}
 
 \item{cutoff}{The cutoff method}
+
+\item{digits}{Round results to this many decimal places}
 
 \item{cumulative}{Return cumulative values}
 
@@ -90,7 +101,8 @@ Units for \code{daily_min}, \code{daily_max}, \code{thresh_low}, and \code{thres
 (i.e., all Fahrenheit or all Celsius). The function does not check for unit consistency.
 
 \code{nextday_min} is required for the double-triangle and the double-sine methods. These methods use the minimum temperature
-of the following day to model temperatures in the 2nd half of thd day.
+of the following day to model temperatures in the 2nd half of the day. If omitted or NA, the daily minimum temperature will be
+substituted.
 
 \code{no_neg = TRUE} sets negative values to zero. This is generally preferred when using degree days to predict the timing of
  development milestones, if one assumes that growth can not go backwards.

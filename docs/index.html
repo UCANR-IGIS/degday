@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">degday</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-<p><a href="http://ucanr-igis.github.io/degday" class="external-link"><img src="reference/figures/logo.png" align="right" style="padding:15px; height:150px;"></a><strong>degday</strong> provides formulas for estimating <a href="https://en.wikipedia.org/wiki/Growing_degree-day" class="external-link">degree days</a> from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the growth of plants and insects. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as provide a species-specific temperature range in which development occurs.</p>
+<p><a href="http://ucanr-igis.github.io/degday" class="external-link"><img src="reference/figures/logo.png" align="right" style="padding:15px; height:200px; width:177px;"></a><strong>degday</strong> provides formulas for estimating <a href="https://en.wikipedia.org/wiki/Growing_degree-day" class="external-link">degree days</a> from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the growth of plants and insects. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as provide a species-specific temperature range in which development occurs.</p>
 <p>Formulas are based on the work by Zalom et al (<a href="#references">1983</a>). These same formulas are used on the <a href="http://ipm.ucanr.edu/WEATHER/" class="external-link">UC Integrated Pest Management</a> (UC IPM) website. See the UC IPM website for additional background on <a href="http://ipm.ucanr.edu/WEATHER/ddconcepts.html" class="external-link">degree days</a>, <a href="http://ipm.ucanr.edu/WEATHER/ddfigindex.html" class="external-link">detailed figures and formulas</a>, and <a href="http://www.ipm.ucdavis.edu/MODELS/" class="external-link">models</a> that predict growth stages of various crops and pests based on degree days.</p>
 <p>degday implements all the formulas in Zalom et al (<a href="#references">1983</a>), including the single and double triangle methods, the single and double sine methods, and the simple average method. All formulas use the horizontal cutoff method. degday does not currently support the vertical cutoff method, nor the corrected sine and triangle methods.</p>
 <p>You might be wondering which of the four estimation methods to use? Most people compute degree days not as an end in itself, but rather to look-up when a development milestone, such as blooming in a plant or larvae emergence in an insect, is expected. Hence you should use whichever method of degree days referenced in the lookup table. When in doubt, use the single-sine method. For more info about the different methods, see Roltsch et al (<a href="#references">1999</a>).</p>
@@ -99,73 +99,74 @@
 </h2>
 <p>To illustrate, we can compute degree days for a sample dataset consisting of one year of minimum and maximum daily temperatures from the <a href="http://ipm.ucanr.edu/calludt.cgi/WXSTATIONDATA?MAP=yolo.html&amp;STN=Esparto.A" class="external-link">Esparto.A</a> CIMIS weather station in Yolo County, California.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ucanr-igis/degday" class="external-link">degday</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-
-<span class="va">espartoa_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/espartoa-weather-2020.csv"</span>, package <span class="op">=</span> <span class="st">"degday"</span><span class="op">)</span>
-<span class="va">espartoa_temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">espartoa_csv</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span>
-<span class="va">espartoa_temp</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;     station       date tmin tmax</span>
-<span class="co">#&gt; 1 Esparto.A 2020-01-01   38   55</span>
-<span class="co">#&gt; 2 Esparto.A 2020-01-02   36   67</span>
-<span class="co">#&gt; 3 Esparto.A 2020-01-03   33   59</span>
-<span class="co">#&gt; 4 Esparto.A 2020-01-04   37   59</span>
-<span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63</span>
-<span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ucanr-igis/degday" class="external-link">degday</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">espartoa_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/espartoa-weather-2020.csv"</span>, package <span class="op">=</span> <span class="st">"degday"</span><span class="op">)</span></span>
+<span><span class="va">espartoa_temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">espartoa_csv</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">espartoa_temp</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     station       date tmin tmax</span></span>
+<span><span class="co">#&gt; 1 Esparto.A 2020-01-01   38   55</span></span>
+<span><span class="co">#&gt; 2 Esparto.A 2020-01-02   36   67</span></span>
+<span><span class="co">#&gt; 3 Esparto.A 2020-01-03   33   59</span></span>
+<span><span class="co">#&gt; 4 Esparto.A 2020-01-04   37   59</span></span>
+<span><span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63</span></span>
+<span><span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58</span></span></code></pre></div>
 <p>To compute degree days, we have to tell it a range of temperatures in which development occurs. We’ll select 55.0°F and 93.9°F, which are the lower and upper thresholds for <a href="http://ipm.ucanr.edu/PHENOLOGY/ma-navel_orangeworm.html" class="external-link">Navel Orangeworm</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">thresh_low</span> <span class="op">&lt;-</span> <span class="fl">55</span>
-<span class="va">thresh_up</span> <span class="op">&lt;-</span> <span class="fl">93.9</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">thresh_low</span> <span class="op">&lt;-</span> <span class="fl">55</span></span>
+<span><span class="va">thresh_low</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<span><span class="va">thresh_up</span> <span class="op">&lt;-</span> <span class="fl">93.9</span></span></code></pre></div>
 <p>The single-triangle and single-sine methods can be computed with <code><a href="reference/dd_calc.html">dd_sng_tri()</a></code> and <code><a href="reference/dd_calc.html">dd_sng_sine()</a></code>. We can add them as columns in our table using <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">espartoa_dd</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sng_tri <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_sng_tri</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, 
-                              thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span>,
-         sng_sine <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_sng_sine</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, 
-                                thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;  - using single triangle method</span>
-<span class="co">#&gt;  - using single sine method</span>
-
-<span class="va">espartoa_dd</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;     station       date tmin tmax   sng_tri  sng_sine</span>
-<span class="co">#&gt; 1 Esparto.A 2020-01-01   38   55 0.0000000 0.0000000</span>
-<span class="co">#&gt; 2 Esparto.A 2020-01-02   36   67 2.3225806 3.3101298</span>
-<span class="co">#&gt; 3 Esparto.A 2020-01-03   33   59 0.3076923 0.6766645</span>
-<span class="co">#&gt; 4 Esparto.A 2020-01-04   37   59 0.3636364 0.7378844</span>
-<span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63 1.2800000 1.9896042</span>
-<span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58 0.2045455 0.4768866</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">espartoa_dd</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sng_tri <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_sng_tri</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, </span>
+<span>                              thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span>,</span>
+<span>         sng_sine <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_sng_sine</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, </span>
+<span>                                thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  - using single triangle method</span></span>
+<span><span class="co">#&gt;  - using single sine method</span></span>
+<span></span>
+<span><span class="va">espartoa_dd</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     station       date tmin tmax sng_tri sng_sine</span></span>
+<span><span class="co">#&gt; 1 Esparto.A 2020-01-01   38   55    0.74     1.19</span></span>
+<span><span class="co">#&gt; 2 Esparto.A 2020-01-02   36   67    4.66     5.71</span></span>
+<span><span class="co">#&gt; 3 Esparto.A 2020-01-03   33   59    1.56     2.34</span></span>
+<span><span class="co">#&gt; 4 Esparto.A 2020-01-04   37   59    1.84     2.56</span></span>
+<span><span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63    3.38     4.23</span></span>
+<span><span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58    1.45     2.13</span></span></code></pre></div>
 <p>To compute degree days using the double-triangle and double-sine methods, we need to first add a column to our temperature table for the “day after” minimum temperature. That’s because these methods use the minimum temperature of the next day to better model cooling in the afternoon and evening hours.</p>
-<p>We can add the next-day minimum temperature to our table with a little dplyr. Note this requires us to drop-the final row (because we don’t have a next-day temperature for it).</p>
+<p>We can add the next-day minimum temperature to our table with a little dplyr.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">espartoa_temp2</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>tmin_next <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lead</a></span><span class="op">(</span><span class="va">tmin</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="va">espartoa_temp2</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;     station       date tmin tmax tmin_next</span>
-<span class="co">#&gt; 1 Esparto.A 2020-01-01   38   55        36</span>
-<span class="co">#&gt; 2 Esparto.A 2020-01-02   36   67        33</span>
-<span class="co">#&gt; 3 Esparto.A 2020-01-03   33   59        37</span>
-<span class="co">#&gt; 4 Esparto.A 2020-01-04   37   59        38</span>
-<span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63        36</span>
-<span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58        30</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">espartoa_temp2</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>tmin_next <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lead</a></span><span class="op">(</span><span class="va">tmin</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">espartoa_temp2</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     station       date tmin tmax tmin_next</span></span>
+<span><span class="co">#&gt; 1 Esparto.A 2020-01-01   38   55        36</span></span>
+<span><span class="co">#&gt; 2 Esparto.A 2020-01-02   36   67        33</span></span>
+<span><span class="co">#&gt; 3 Esparto.A 2020-01-03   33   59        37</span></span>
+<span><span class="co">#&gt; 4 Esparto.A 2020-01-04   37   59        38</span></span>
+<span><span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63        36</span></span>
+<span><span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58        30</span></span></code></pre></div>
 <p>The double-triangle and double-sine methods can be computed with <code><a href="reference/dd_calc.html">dd_dbl_tri()</a></code> and <code><a href="reference/dd_calc.html">dd_dbl_sine()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">espartoa_dd2</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp2</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>dbl_tri <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_dbl_tri</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, nextday_min <span class="op">=</span> <span class="va">tmin_next</span>,
-                              thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span>,
-         dbl_sine <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_dbl_sine</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, nextday_min <span class="op">=</span> <span class="va">tmin_next</span>,
-                                thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;  - using double triangle method</span>
-<span class="co">#&gt;  - using double sine method</span>
-
-<span class="va">espartoa_dd2</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;     station       date tmin tmax tmin_next   dbl_tri  dbl_sine</span>
-<span class="co">#&gt; 1 Esparto.A 2020-01-01   38   55        36 0.0000000 0.0000000</span>
-<span class="co">#&gt; 2 Esparto.A 2020-01-02   36   67        33 2.2201139 3.2285910</span>
-<span class="co">#&gt; 3 Esparto.A 2020-01-03   33   59        37 0.3356643 0.7072744</span>
-<span class="co">#&gt; 4 Esparto.A 2020-01-04   37   59        38 0.3722944 0.7469314</span>
-<span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63        36 1.2325926 1.9493055</span>
-<span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58        30 0.1826299 0.4491396</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">espartoa_dd2</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp2</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>dbl_tri <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_dbl_tri</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, nextday_min <span class="op">=</span> <span class="va">tmin_next</span>,</span>
+<span>                              thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span>,</span>
+<span>         dbl_sine <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_dbl_sine</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, nextday_min <span class="op">=</span> <span class="va">tmin_next</span>,</span>
+<span>                                thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  - using double triangle method</span></span>
+<span><span class="co">#&gt;  - using double sine method</span></span>
+<span></span>
+<span><span class="va">espartoa_dd2</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     station       date tmin tmax tmin_next dbl_tri dbl_sine</span></span>
+<span><span class="co">#&gt; 1 Esparto.A 2020-01-01   38   55        36    0.70     1.15</span></span>
+<span><span class="co">#&gt; 2 Esparto.A 2020-01-02   36   67        33    4.46     5.56</span></span>
+<span><span class="co">#&gt; 3 Esparto.A 2020-01-03   33   59        37    1.70     2.45</span></span>
+<span><span class="co">#&gt; 4 Esparto.A 2020-01-04   37   59        38    1.88     2.59</span></span>
+<span><span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63        36    3.25     4.14</span></span>
+<span><span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58        30    1.30     2.00</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
@@ -205,7 +206,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Andrew Lyons <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7505-6709" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Andy Lyons <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7505-6709" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -223,7 +224,7 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Andrew Lyons.</p>
+<p>Developed by Andy Lyons.</p>
 </div>
 
 <div class="pkgdown">

@@ -9,6 +9,7 @@
 #' @param thresh_up The upper development threshold
 #' @param method The method used
 #' @param cutoff The cutoff method
+#' @param digits Round results to this many decimal places
 #' @param cumulative Return cumulative values
 #' @param no_neg Set negative values to zero
 #' @param interpolate_na Interpolate missing values
@@ -19,7 +20,8 @@
 #' (i.e., all Fahrenheit or all Celsius). The function does not check for unit consistency.
 #'
 #' \code{nextday_min} is required for the double-triangle and the double-sine methods. These methods use the minimum temperature
-#' of the following day to model temperatures in the 2nd half of thd day.
+#' of the following day to model temperatures in the 2nd half of the day. If omitted or NA, the daily minimum temperature will be
+#' substituted.
 #'
 #' \code{no_neg = TRUE} sets negative values to zero. This is generally preferred when using degree days to predict the timing of
 #'  development milestones, if one assumes that growth can not go backwards.
@@ -33,20 +35,19 @@
 #' @importFrom methods is
 #' @export
 
-dd_calc <- function(daily_min, daily_max, nextday_min = NULL,
+dd_calc <- function(daily_min, daily_max, nextday_min = daily_min,
                      thresh_low = NULL, thresh_up = NULL,
                 method = c("sng_tri", "dbl_tri", "sng_sine", "dbl_sine", "simp_avg")[0],
-                cutoff = c("horizontal", "vertical")[1],
+                cutoff = c("horizontal", "vertical", "intermediate")[1],
+                digits = 2,
                 cumulative = FALSE,
                 no_neg = TRUE, interpolate_na = FALSE,
                 quiet = FALSE, debug = FALSE) {
 
   if (!method %in% c("sng_tri", "dbl_tri", "sng_sine", "dbl_sine", "simp_avg")) stop("unknown value for `method`")
-  if (!cutoff %in% c("horizontal", "vertical")) stop("unknown value for `cutoff`")
-  if (cutoff == "vertical") stop("vertical cutoff is not yet supported")
-
+  if (!cutoff %in% c("horizontal", "vertical", "intermediate")) stop("unknown value for `cutoff`")
+  if (cutoff != "horizontal") stop(paste0("The ", cutoff, " cutoff method is not yet supported"))
   if (length(daily_min) != length(daily_max)) stop("daily_min and daily_max must be the same length")
-
   if (FALSE %in% (daily_min <= daily_max)) stop("daily_min must always be less than daily_max")
 
   ## Get rid of the units. (alternatively I would need to check that thresh_low and thresh_up have the
@@ -130,9 +131,10 @@ dd_calc <- function(daily_min, daily_max, nextday_min = NULL,
       if (debug) message(yellow(paste0(" - ", i, ": case_am ", case_am)))
       dd_am <- dd_dbltri_half(case = case_am, tmin = daily_min[i], tmax = daily_max[i], thresh_low = thresh_low, thresh_up = thresh_up)
 
-      case_pm <- dd_case(nextday_min[i], daily_max[i], thresh_low, thresh_up)
+      nextday_min_use <- ifelse(is.na(nextday_min[i]), daily_min[i], nextday_min[i])
+      case_pm <- dd_case(nextday_min_use, daily_max[i], thresh_low, thresh_up)
       if (debug) message(yellow(paste0(" - ", i, ": case_pm ", case_pm)))
-      dd_pm <- dd_dbltri_half(case = case_pm, tmin = nextday_min[i], tmax = daily_max[i], thresh_low = thresh_low, thresh_up = thresh_up)
+      dd_pm <- dd_dbltri_half(case = case_pm, tmin = nextday_min_use, tmax = daily_max[i], thresh_low = thresh_low, thresh_up = thresh_up)
 
       degday <- c(degday, dd_am + dd_pm)
 
@@ -204,14 +206,14 @@ dd_calc <- function(daily_min, daily_max, nextday_min = NULL,
     for (i in good_idx) {
 
       ## With the double-sine half-day formulas, we need to compute two GDD values for each half day.
-
       case_am <- dd_case(daily_min[i], daily_max[i], thresh_low, thresh_up)
       if (debug) message(yellow(paste0(" - ", i, ": case_am ", case_am)))
       dd_am <- dd_dblsine_half(case = case_am, tmin = daily_min[i], tmax = daily_max[i], thresh_low = thresh_low, thresh_up = thresh_up)
 
-      case_pm <- dd_case(nextday_min[i], daily_max[i], thresh_low, thresh_up)
+      nextday_min_use <- ifelse(is.na(nextday_min[i]), daily_min[i], nextday_min[i])
+      case_pm <- dd_case(nextday_min_use, daily_max[i], thresh_low, thresh_up)
       if (debug) message(yellow(paste0(" - ", i, ": case_pm ", case_pm)))
-      dd_pm <- dd_dblsine_half(case = case_pm, tmin = nextday_min[i], tmax = daily_max[i], thresh_low = thresh_low, thresh_up = thresh_up)
+      dd_pm <- dd_dblsine_half(case = case_pm, tmin = nextday_min_use, tmax = daily_max[i], thresh_low = thresh_low, thresh_up = thresh_up)
 
       degday <- c(degday, dd_am + dd_pm)
     }
@@ -226,6 +228,9 @@ dd_calc <- function(daily_min, daily_max, nextday_min = NULL,
     if (!quiet) message(yellow(paste0(" - zeroing out ", sum(degday < 0), " negative degree day values")))
     degday[degday < 0] <- 0
   }
+
+  ## Round values
+  degday <- round(degday, digits)
 
   ## Swap in the computed values
   dd_all[good_idx] <- degday
@@ -248,35 +253,47 @@ dd_calc <- function(daily_min, daily_max, nextday_min = NULL,
 #' @describeIn dd_calc Compute degree days using the single-triangle method
 #' @export
 
-dd_sng_tri <- function(daily_min, daily_max, thresh_low = NULL, thresh_up = NULL, cumulative = FALSE) {
+dd_sng_tri <- function(daily_min, daily_max, thresh_low = NULL, thresh_up = NULL,
+                       cutoff = c("horizontal", "vertical", "intermediate")[1], digits = 2,
+                       cumulative = FALSE) {
+
   dd_calc(daily_min=daily_min, daily_max=daily_max, thresh_low=thresh_low, thresh_up=thresh_up,
-          method ="sng_tri", cutoff = "horizontal", cumulative=cumulative)
+          method ="sng_tri", cutoff=cutoff, digits=digits, cumulative=cumulative)
 }
 
 #' @describeIn dd_calc Compute degree days using the single-sine method
 #' @export
 
-dd_sng_sine <- function(daily_min, daily_max, thresh_low = NULL, thresh_up = NULL, cumulative = FALSE) {
+dd_sng_sine <- function(daily_min, daily_max, thresh_low = NULL, thresh_up = NULL,
+                        cutoff = c("horizontal", "vertical", "intermediate")[1], digits = 2,
+                        cumulative = FALSE) {
+
   dd_calc(daily_min=daily_min, daily_max=daily_max, thresh_low=thresh_low, thresh_up=thresh_up,
-          method ="sng_sine", cutoff = "horizontal", cumulative=cumulative)
+          method ="sng_sine", cutoff=cutoff, digits=digits, cumulative=cumulative)
 }
 
 #' @describeIn dd_calc Compute degree days using the double-triangle method
 #' @export
 
-dd_dbl_tri <- function(daily_min, daily_max, nextday_min = NULL, thresh_low = NULL, thresh_up = NULL, cumulative = FALSE) {
+dd_dbl_tri <- function(daily_min, daily_max, nextday_min = daily_min, thresh_low = NULL, thresh_up = NULL,
+                       cutoff = c("horizontal", "vertical", "intermediate")[1], digits = 2,
+                       cumulative = FALSE) {
+
   dd_calc(daily_min=daily_min, daily_max=daily_max, nextday_min=nextday_min,
           thresh_low=thresh_low, thresh_up=thresh_up,
-          method ="dbl_tri", cutoff = "horizontal", cumulative=cumulative)
+          method ="dbl_tri", cutoff=cutoff, digits=digits, cumulative=cumulative)
 }
 
 #' @describeIn dd_calc Compute degree days using the double-sine method
 #' @export
 
-dd_dbl_sine <- function(daily_min, daily_max, nextday_min = NULL, thresh_low = NULL, thresh_up = NULL, cumulative = FALSE) {
+dd_dbl_sine <- function(daily_min, daily_max, nextday_min = daily_min, thresh_low = NULL, thresh_up = NULL,
+                        cutoff = c("horizontal", "vertical", "intermediate")[1], digits = 2,
+                        cumulative = FALSE) {
+
   dd_calc(daily_min=daily_min, daily_max=daily_max, nextday_min=nextday_min,
           thresh_low=thresh_low, thresh_up=thresh_up,
-          method ="dbl_sine", cutoff = "horizontal", cumulative=cumulative)
+          method ="dbl_sine", cutoff=cutoff, digits=digits, cumulative=cumulative)
 }
 
 #' Determine the case
