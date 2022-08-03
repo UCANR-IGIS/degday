@@ -61,7 +61,6 @@ To compute degree days, we have to tell it a range of temperatures in which deve
 
 ```{r thresholds}
 thresh_low <- 55
-thresh_low <- 50
 thresh_up <- 93.9
 ```
 

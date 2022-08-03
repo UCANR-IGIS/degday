@@ -98,7 +98,6 @@ Orangeworm](http://ipm.ucanr.edu/PHENOLOGY/ma-navel_orangeworm.html).
 
 ``` r
 thresh_low <- 55
-thresh_low <- 50
 thresh_up <- 93.9
 ```
 
@@ -117,12 +116,12 @@ espartoa_dd <- espartoa_temp %>%
 
 espartoa_dd %>% head()
 #>     station       date tmin tmax sng_tri sng_sine
-#> 1 Esparto.A 2020-01-01   38   55    0.74     1.19
-#> 2 Esparto.A 2020-01-02   36   67    4.66     5.71
-#> 3 Esparto.A 2020-01-03   33   59    1.56     2.34
-#> 4 Esparto.A 2020-01-04   37   59    1.84     2.56
-#> 5 Esparto.A 2020-01-05   38   63    3.38     4.23
-#> 6 Esparto.A 2020-01-06   36   58    1.45     2.13
+#> 1 Esparto.A 2020-01-01   38   55    0.00     0.00
+#> 2 Esparto.A 2020-01-02   36   67    2.32     3.31
+#> 3 Esparto.A 2020-01-03   33   59    0.31     0.68
+#> 4 Esparto.A 2020-01-04   37   59    0.36     0.74
+#> 5 Esparto.A 2020-01-05   38   63    1.28     1.99
+#> 6 Esparto.A 2020-01-06   36   58    0.20     0.48
 ```
 
 To compute degree days using the double-triangle and double-sine
@@ -162,12 +161,12 @@ espartoa_dd2 <- espartoa_temp2 %>%
 
 espartoa_dd2 %>% head()
 #>     station       date tmin tmax tmin_next dbl_tri dbl_sine
-#> 1 Esparto.A 2020-01-01   38   55        36    0.70     1.15
-#> 2 Esparto.A 2020-01-02   36   67        33    4.46     5.56
-#> 3 Esparto.A 2020-01-03   33   59        37    1.70     2.45
-#> 4 Esparto.A 2020-01-04   37   59        38    1.88     2.59
-#> 5 Esparto.A 2020-01-05   38   63        36    3.25     4.14
-#> 6 Esparto.A 2020-01-06   36   58        30    1.30     2.00
+#> 1 Esparto.A 2020-01-01   38   55        36    0.00     0.00
+#> 2 Esparto.A 2020-01-02   36   67        33    2.22     3.23
+#> 3 Esparto.A 2020-01-03   33   59        37    0.34     0.71
+#> 4 Esparto.A 2020-01-04   37   59        38    0.37     0.75
+#> 5 Esparto.A 2020-01-05   38   63        36    1.23     1.95
+#> 6 Esparto.A 2020-01-06   36   58        30    0.18     0.45
 ```
 
   
