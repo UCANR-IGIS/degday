@@ -4,10 +4,12 @@ Compute Degree Days
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-[![degree-day-challenge:
-passing](https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/badges/degree-day-challenge-passing.svg)](https://ucanr-igis.github.io/degree-day-challenge/)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![degday status
+badge](https://ajlyons.r-universe.dev/badges/degday)](https://ajlyons.r-universe.dev)
+[![degree-day-challenge:
+passing](https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/badges/degree-day-challenge-passing.svg)](https://ucanr-igis.github.io/degree-day-challenge/)
 <!-- badges: end -->
 
 <a href='http://ucanr-igis.github.io/degday'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday**
