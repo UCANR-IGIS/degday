@@ -10,3 +10,5 @@
 ^Meta$
 ^data-raw$
 ^scripts$
+^CODE_OF_CONDUCT\.md$
+^\.github$
