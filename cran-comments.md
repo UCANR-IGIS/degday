@@ -1,6 +1,6 @@
 ## Resubmission
 
-This is a reubmission. In this version I 
+This is a reubmission. In this version I have:
 
  * added a trailing slash to the following URL in the description:
      
@@ -8,11 +8,26 @@ This is a reubmission. In this version I
  
  * committed the update to GitHub
  
- * checked the package again by running `devtools::check_rhub()`
- 
- 
+ * checked the package again using [GitHub Actions](https://github.com/UCANR-IGIS/degday/actions)
 
-## R CMD check results
+     * There were no ERRORs or WARNINGs, or NOTEs
+     
+ * checked the package again on R-Hub by running `devtools::check_rhub()` 
+
+     * There were no ERRORs or WARNINGs
+
+     * R-Hub: Notes:
+        
+        Windows Server 2022, R-devel, 64 bit: 
+          * 'Found detritus in the temp directory: Found the following files/directories: 'lastMiKTeXException'
+          * I couldn't find any such file locally, think it was something that didn't get cleaned up on their server
+        
+        Linux: 
+          * "Skipping checking HTML validation: no command 'tidy' found"
+          * This sounds like an issue with their checking system
+
+
+## First Submission: R CMD check results
 
 There were no ERRORs, WARNINGs, or NOTEs. 
 
