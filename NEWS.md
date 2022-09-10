@@ -1,3 +1,12 @@
+# degday 0.4.0 (2022-09-07)
+
+* `dd_calc()`: added `simp_avg_zero_method` argument for the so-called 'corn' variant of the simple average method
+* `dd_simp_avg()`: new function (convenience wrapper for the simple average method)
+
+# degday 0.3.0 (2022-08-21)
+
+* `dd_fetch_cimis()` removed (will add to ca_weather package)
+
 # degday 0.2.1 (2022-08-01)
 
 * `dd_sng_tri()`, `dd_sng_sine()`, `dd_dbl_tri()`, `dd_dbl_sine()`: added `cutoff` argument

@@ -5,24 +5,27 @@ Compute Degree Days
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![degday status
 badge](https://ajlyons.r-universe.dev/badges/degday)](https://ajlyons.r-universe.dev)
 [![degree-day-challenge:
 passing](https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/badges/degree-day-challenge-passing.svg)](https://ucanr-igis.github.io/degree-day-challenge/)
+[![R-CMD-check](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 <a href='http://ucanr-igis.github.io/degday'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday**
 provides formulas for estimating [degree
 days](https://en.wikipedia.org/wiki/Growing_degree-day) from daily
 minimum and maximum temperatures. Degree days are commonly used in
-agriculture to predict the growth of plants and insects. To use the
-formulas, you must pass a record of daily minimum and maximum
-temperatures, as well as provide a species-specific temperature range in
-which development occurs.
+agriculture to predict the development of plants and insects, which are
+strongly correlated with accumulated heat above a certain a temperature.
+To use the formulas, you must pass a record of daily minimum and maximum
+temperatures, as well as a species-dependent temperature range in which
+growth is possible.
 
-Formulas are based on the work by Zalom et al ([1983](#references)).
-These same formulas are used on the [UC Integrated Pest
+Formulas are based on the work by Zalom et al ([1983](#references)) and
+McMaster and Wilhelm ([1997](#references)). These same formulas are used
+on the University of California [Integrated Pest
 Management](http://ipm.ucanr.edu/WEATHER/) (UC IPM) website. See the UC
 IPM website for additional background on [degree
 days](http://ipm.ucanr.edu/WEATHER/ddconcepts.html), [detailed figures
@@ -30,19 +33,24 @@ and formulas](http://ipm.ucanr.edu/WEATHER/ddfigindex.html), and
 [models](http://www.ipm.ucdavis.edu/MODELS/) that predict growth stages
 of various crops and pests based on degree days.
 
-degday implements all the formulas in Zalom et al ([1983](#references)),
-including the single and double triangle methods, the single and double
-sine methods, and the simple average method. All formulas use the
-horizontal cutoff method. degday does not currently support the vertical
-cutoff method, nor the corrected sine and triangle methods.
+`degday` implements all formulas from Zalom et al ([1983](#references)),
+including the single and double triangle methods, and the single and
+double sine methods. All formulas use the horizontal cutoff method.
+`degday` does not currently support the vertical cutoff method, nor the
+corrected sine and triangle methods. The simple average method is based
+on McMaster and Wilhelm ([1997](#references)), which allows for an
+optional upper threshold and supports the so-called ‘corn’ method for
+dealing with temperatures below the lower and above the upper
+thresholds.
 
-You might be wondering which of the four estimation methods to use? Most
-people compute degree days not as an end in itself, but rather to
-look-up when a development milestone, such as blooming in a plant or
-larvae emergence in an insect, is expected. Hence you should use
-whichever method of degree days referenced in the lookup table. When in
-doubt, use the single-sine method. For more info about the different
-methods, see Roltsch et al ([1999](#references)).
+You might be wondering, *which of the four estimation methods should I
+use?* Most people compute degree days not as an end in itself, but
+rather to look-up when a development milestone is predicted to take
+place, such as blooming for a tree crop, or larvae emergence in an
+insect. Hence you should use the same method that was used to build the
+reference table. When in doubt, use the single-sine method. For more
+info about the different methods, see Roltsch et al
+([1999](#references)).
 
 Degree days are sometimes referred to as *growing degree days*, which
 generally refers to data that drives models of specifically plant
@@ -181,6 +189,11 @@ Zalom, F.G., P.B. Goodell, L.T. Wilson, W.W. Barnett, and W.J. Bentley.
 1983. *Degree-days: The calculation and use of heat units in pest
 management*. UC DANR Leaflet 21373. Available from [Hathi
 Trust](https://catalog.hathitrust.org/Record/008707238).
+
+McMaster, G. S., and Wilhelm, W. W. 1997. *Growing degree-days: one
+equation, two interpretations*. Agricultural and forest meteorology,
+87(4), 291-300. Available from
+[unl.edu](https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=1086&context=usdaarsfacpub)
 
 Roltsch, W. J.; Zalom, F. G.; Strawn, A. J.; Strand, J. F.; Pitcairn, M.
 J. 1999. *Evaluation of several degree-day estimation methods in

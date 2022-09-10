@@ -1,8 +1,8 @@
 Package: degday
 Type: Package
 Title: Compute Degree Days
-Version: 0.2.1
-Date: 2022-08-01
+Version: 0.4.0
+Date: 2022-09-09
 Authors@R: c(person(given = "Andy",
                   family = "Lyons", 
                   role = c("aut", "cre"),
@@ -12,13 +12,12 @@ Authors@R: c(person(given = "Andy",
                    role = "cph"))
 BugReports: https://github.com/ucanr-igis/degday/issues
 URL: https://github.com/ucanr-igis/degday
-Description: Compute degree days from daily min and max temperatures for modeling plant and animal development.
+Description: Compute degree days from daily min and max temperatures for modeling plant and insect development.
 License: GPL (>= 3)
 Depends: 
     R (>= 3.5)
 Imports: 
     magrittr,
-    dplyr,
     crayon,
     zoo,
     methods
@@ -26,6 +25,7 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     tidyr,
+    dplyr,
     cimir,
     units
 Encoding: UTF-8

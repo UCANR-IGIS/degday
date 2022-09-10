@@ -2,11 +2,12 @@
 % Please edit documentation in R/dd_calc.R
 \name{dd_calc}
 \alias{dd_calc}
+\alias{dd_simp_avg}
 \alias{dd_sng_tri}
 \alias{dd_sng_sine}
 \alias{dd_dbl_tri}
 \alias{dd_dbl_sine}
-\title{Compute degree days from daily data}
+\title{Estimate degree days from daily data}
 \usage{
 dd_calc(
   daily_min,
@@ -19,9 +20,21 @@ dd_calc(
   digits = 2,
   cumulative = FALSE,
   no_neg = TRUE,
+  simp_avg_zero_method = 1,
   interpolate_na = FALSE,
   quiet = FALSE,
   debug = FALSE
+)
+
+dd_simp_avg(
+  daily_min,
+  daily_max,
+  thresh_low,
+  thresh_up = NULL,
+  simp_avg_zero_method = 1,
+  digits = 2,
+  cumulative = FALSE,
+  quiet = FALSE
 )
 
 dd_sng_tri(
@@ -31,7 +44,8 @@ dd_sng_tri(
   thresh_up = NULL,
   cutoff = c("horizontal", "vertical", "intermediate")[1],
   digits = 2,
-  cumulative = FALSE
+  cumulative = FALSE,
+  quiet = FALSE
 )
 
 dd_sng_sine(
@@ -41,7 +55,8 @@ dd_sng_sine(
   thresh_up = NULL,
   cutoff = c("horizontal", "vertical", "intermediate")[1],
   digits = 2,
-  cumulative = FALSE
+  cumulative = FALSE,
+  quiet = FALSE
 )
 
 dd_dbl_tri(
@@ -52,7 +67,8 @@ dd_dbl_tri(
   thresh_up = NULL,
   cutoff = c("horizontal", "vertical", "intermediate")[1],
   digits = 2,
-  cumulative = FALSE
+  cumulative = FALSE,
+  quiet = FALSE
 )
 
 dd_dbl_sine(
@@ -63,38 +79,44 @@ dd_dbl_sine(
   thresh_up = NULL,
   cutoff = c("horizontal", "vertical", "intermediate")[1],
   digits = 2,
-  cumulative = FALSE
+  cumulative = FALSE,
+  quiet = FALSE
 )
 }
 \arguments{
-\item{daily_min}{The daily minimum temperature}
+\item{daily_min}{Daily minimum temperature}
 
-\item{daily_max}{The daily maximum temperature}
+\item{daily_max}{Daily maximum temperature}
 
-\item{nextday_min}{The minimum temp the day after}
+\item{nextday_min}{Minimum temp the day after}
 
-\item{thresh_low}{The lower development threshold}
+\item{thresh_low}{Lower development threshold temperature}
 
-\item{thresh_up}{The upper development threshold}
+\item{thresh_up}{Upper development threshold temperature}
 
-\item{method}{The method used}
+\item{method}{Estimation method}
 
-\item{cutoff}{The cutoff method}
+\item{cutoff}{Estimation cutoff method}
 
-\item{digits}{Round results to this many decimal places}
+\item{digits}{Number of decimal places to round results to}
 
 \item{cumulative}{Return cumulative values}
 
 \item{no_neg}{Set negative values to zero}
 
-\item{interpolate_na}{Interpolate missing values}
+\item{simp_avg_zero_method}{How to handle temperatures in the simple average method that fall outside the upper and lower thresholds (see details)}
 
-\item{quiet}{Suppress messages}
+\item{interpolate_na}{Interpolate missing values, logical}
+
+\item{quiet}{Suppress messages, logical}
 
 \item{debug}{Show additional messages}
 }
+\value{
+A vector of estimated degree day values (either daily or cumulative, depending on the value of \code{cumulative})
+}
 \description{
-Compute degree days from daily min and max temperature
+Estimate degree days from daily min and max temperature
 }
 \details{
 Units for \code{daily_min}, \code{daily_max}, \code{thresh_low}, and \code{thresh_up} should all be the same
@@ -107,18 +129,48 @@ substituted.
 \code{no_neg = TRUE} sets negative values to zero. This is generally preferred when using degree days to predict the timing of
  development milestones, if one assumes that growth can not go backwards.
 
+The simple average method is taken from McMaster and Wilhelm (\href{https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=1086&context=usdaarsfacpub}{1997}). This method requires passing a lower threshold (also called the base temp). There are two ways of handling temperatures that fall below the base temperature. Most studies and applications use the default method (\code{simp_avg_zero_method = 1}) which simply 'zeroes out' average daily temperatures that fall below the base temp. Some studies (notably corn) use method 2, which truncates the daily minimum and maximum temperature before computing the simple average. Method 2 also allows you to pass an upper threshold. For details, see McMaster and Wilhelm.
+
 Missing values (NAs) in the temperatures will result in NA degree days. If \code{interpolate_na = TRUE}, missing degree days will
 be interpolated. NAs in the middle of the series will be linearly interpolated, and NAs at the ends will be filled with the
 adjacent values.
 }
 \section{Functions}{
 \itemize{
-\item \code{dd_sng_tri()}: Compute degree days using the single-triangle method
+\item \code{dd_simp_avg()}: Estimate degree days using the simple avg method
 
-\item \code{dd_sng_sine()}: Compute degree days using the single-sine method
+\item \code{dd_sng_tri()}: Estimate degree days using the single-triangle method
 
-\item \code{dd_dbl_tri()}: Compute degree days using the double-triangle method
+\item \code{dd_sng_sine()}: Estimate degree days using the single-sine method
 
-\item \code{dd_dbl_sine()}: Compute degree days using the double-sine method
+\item \code{dd_dbl_tri()}: Estimate degree days using the double-triangle method
+
+\item \code{dd_dbl_sine()}: Estimate degree days using the double-sine method
 
 }}
+\examples{
+daily_temps <- system.file("extdata/espartoa-weather-2020.csv", package = "degday") \%>\%
+  read.csv() \%>\%
+    dplyr::mutate(date = as.Date(date)) \%>\%
+    dplyr::slice(1:10)
+daily_temps
+## Simple average method
+dd_simp_avg(daily_min = daily_temps$tmin,
+            daily_max = daily_temps$tmax,
+            thresh_low = 55)
+## Single sine method
+dd_sng_sine(daily_min = daily_temps$tmin, daily_max = daily_temps$tmax,
+            thresh_low = 55, thresh_up = 93.9)
+## Single triangle method
+dd_sng_tri(daily_min = daily_temps$tmin, daily_max = daily_temps$tmax,
+           thresh_low = 55, thresh_up = 93.9)
+## Add next day min temp as an additional column
+daily_temps_plus_tmin_next <- daily_temps \%>\% dplyr::mutate(tmin_next = dplyr::lead(tmin, n = 1))
+daily_temps_plus_tmin_next
+## Double-triangle method
+dd_dbl_tri(daily_min = daily_temps_plus_tmin_next$tmin,
+           daily_max = daily_temps_plus_tmin_next$tmax,
+           nextday_min = daily_temps_plus_tmin_next$tmin_next,
+           thresh_low = 55, thresh_up = 93.9)
+
+}

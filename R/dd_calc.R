@@ -1,19 +1,20 @@
-#' Compute degree days from daily data
+#' Estimate degree days from daily data
 #'
-#' Compute degree days from daily min and max temperature
+#' Estimate degree days from daily min and max temperature
 #'
-#' @param daily_min The daily minimum temperature
-#' @param daily_max The daily maximum temperature
-#' @param nextday_min The minimum temp the day after
-#' @param thresh_low The lower development threshold
-#' @param thresh_up The upper development threshold
-#' @param method The method used
-#' @param cutoff The cutoff method
-#' @param digits Round results to this many decimal places
+#' @param daily_min Daily minimum temperature
+#' @param daily_max Daily maximum temperature
+#' @param nextday_min Minimum temp the day after
+#' @param thresh_low Lower development threshold temperature
+#' @param thresh_up Upper development threshold temperature
+#' @param method Estimation method
+#' @param cutoff Estimation cutoff method
+#' @param digits Number of decimal places to round results to
 #' @param cumulative Return cumulative values
 #' @param no_neg Set negative values to zero
-#' @param interpolate_na Interpolate missing values
-#' @param quiet Suppress messages
+#' @param simp_avg_zero_method How to handle temperatures in the simple average method that fall outside the upper and lower thresholds (see details)
+#' @param interpolate_na Interpolate missing values, logical
+#' @param quiet Suppress messages, logical
 #' @param debug Show additional messages
 #'
 #' @details Units for \code{daily_min}, \code{daily_max}, \code{thresh_low}, and \code{thresh_up} should all be the same
@@ -26,9 +27,38 @@
 #' \code{no_neg = TRUE} sets negative values to zero. This is generally preferred when using degree days to predict the timing of
 #'  development milestones, if one assumes that growth can not go backwards.
 #'
+#' The simple average method is taken from McMaster and Wilhelm (\href{https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=1086&context=usdaarsfacpub}{1997}). This method requires passing a lower threshold (also called the base temp). There are two ways of handling temperatures that fall below the base temperature. Most studies and applications use the default method (\code{simp_avg_zero_method = 1}) which simply 'zeroes out' average daily temperatures that fall below the base temp. Some studies (notably corn) use method 2, which truncates the daily minimum and maximum temperature before computing the simple average. Method 2 also allows you to pass an upper threshold. For details, see McMaster and Wilhelm.
+#'
 #' Missing values (NAs) in the temperatures will result in NA degree days. If \code{interpolate_na = TRUE}, missing degree days will
 #' be interpolated. NAs in the middle of the series will be linearly interpolated, and NAs at the ends will be filled with the
 #' adjacent values.
+#'
+#' @return A vector of estimated degree day values (either daily or cumulative, depending on the value of \code{cumulative})
+#'
+#' @examples
+#' daily_temps <- system.file("extdata/espartoa-weather-2020.csv", package = "degday") %>%
+#'   read.csv() %>%
+#'     dplyr::mutate(date = as.Date(date)) %>%
+#'     dplyr::slice(1:10)
+#' daily_temps
+#' ## Simple average method
+#' dd_simp_avg(daily_min = daily_temps$tmin,
+#'             daily_max = daily_temps$tmax,
+#'             thresh_low = 55)
+#' ## Single sine method
+#' dd_sng_sine(daily_min = daily_temps$tmin, daily_max = daily_temps$tmax,
+#'             thresh_low = 55, thresh_up = 93.9)
+#' ## Single triangle method
+#' dd_sng_tri(daily_min = daily_temps$tmin, daily_max = daily_temps$tmax,
+#'            thresh_low = 55, thresh_up = 93.9)
+#' ## Add next day min temp as an additional column
+#' daily_temps_plus_tmin_next <- daily_temps %>% dplyr::mutate(tmin_next = dplyr::lead(tmin, n = 1))
+#' daily_temps_plus_tmin_next
+#' ## Double-triangle method
+#' dd_dbl_tri(daily_min = daily_temps_plus_tmin_next$tmin,
+#'            daily_max = daily_temps_plus_tmin_next$tmax,
+#'            nextday_min = daily_temps_plus_tmin_next$tmin_next,
+#'            thresh_low = 55, thresh_up = 93.9)
 #'
 #' @importFrom crayon yellow red
 #' @importFrom zoo na.fill
@@ -41,8 +71,11 @@ dd_calc <- function(daily_min, daily_max, nextday_min = daily_min,
                 cutoff = c("horizontal", "vertical", "intermediate")[1],
                 digits = 2,
                 cumulative = FALSE,
-                no_neg = TRUE, interpolate_na = FALSE,
-                quiet = FALSE, debug = FALSE) {
+                no_neg = TRUE,
+                simp_avg_zero_method = 1,
+                interpolate_na = FALSE,
+                quiet = FALSE,
+                debug = FALSE) {
 
   if (!method %in% c("sng_tri", "dbl_tri", "sng_sine", "dbl_sine", "simp_avg")) stop("unknown value for `method`")
   if (!cutoff %in% c("horizontal", "vertical", "intermediate")) stop("unknown value for `cutoff`")
@@ -77,9 +110,43 @@ dd_calc <- function(daily_min, daily_max, nextday_min = daily_min,
     #################################
 
     if (!quiet) message(yellow(" - using simple average method"))
-    if (!is.null(thresh_up) && !quiet) message(yellow(" - the simple average method doesn't support an upper threshhold, ignoring"))
-    thresh_low_use <- ifelse(is.null(thresh_low), 0, thresh_low)
-    degday <- ((daily_max[good_idx] + daily_min[good_idx]) / 2) - thresh_low_use
+
+    if (is.null(thresh_low)) stop(" - the simple average method requires a lower threshhold (base temp)")
+    if (!simp_avg_zero_method %in% 1:2) stop("simp_avg_zero_method must be 1 or 2")
+    if (!no_neg) stop("`no_neg` must be TRUE for the simple average method")
+
+    thresh_low_use <- thresh_low
+
+    ## If thresh_up is NULL, set a default value of 500
+    thresh_up_use <- ifelse(is.null(thresh_up), 200, thresh_up)
+
+
+    if (simp_avg_zero_method == 1) {
+      ## First compute the average daily temp
+      temp_avg <- (daily_max[good_idx] + daily_min[good_idx]) / 2
+
+      ## If temp_avg falls outside thresh_low_use and thresh_up_use, manually crop it
+      temp_avg[which(temp_avg < thresh_low_use)] <- thresh_low_use
+      temp_avg[which(temp_avg > thresh_up_use)] <- thresh_up_use
+
+      degday <- temp_avg - thresh_low_use
+
+    } else if (simp_avg_zero_method == 2) {
+      ## First coerce tmin and tmax to be within [thresh_low_use..thresh_up_use]
+
+      ## We can work on daily_max rather than daily_max[good_idx] because which() throws out NAs
+      daily_min[which(daily_min < thresh_low_use)] <- thresh_low_use
+      daily_max[which(daily_max < thresh_low_use)] <- thresh_low_use
+
+      ## tmax and tmin are both set to thresh_up if they are greater than thresh_low
+      daily_min[which(daily_min > thresh_up_use)] <- thresh_up_use
+      daily_max[which(daily_max > thresh_up_use)] <- thresh_up_use
+
+      ## Now compute degree days
+      degday <- ((daily_max[good_idx] + daily_min[good_idx]) / 2) - thresh_low_use
+
+    }
+
 
   } else if (method == "sng_tri") {
     ### ------ SINGLE TRIANGLE -------
@@ -250,50 +317,64 @@ dd_calc <- function(daily_min, daily_max, nextday_min = daily_min,
 
 }
 
-#' @describeIn dd_calc Compute degree days using the single-triangle method
+#' @describeIn dd_calc Estimate degree days using the simple avg method
+#' @export
+
+dd_simp_avg <- function(daily_min, daily_max, thresh_low, thresh_up = NULL,
+                        simp_avg_zero_method = 1, digits = 2, cumulative = FALSE,
+                        quiet = FALSE) {
+
+  dd_calc(daily_min = daily_min, daily_max = daily_max,
+          thresh_low = thresh_low, thresh_up = thresh_up,
+          method ="simp_avg", simp_avg_zero_method = simp_avg_zero_method,
+          digits = digits, cumulative = cumulative, quiet = quiet)
+}
+
+
+#' @describeIn dd_calc Estimate degree days using the single-triangle method
 #' @export
 
 dd_sng_tri <- function(daily_min, daily_max, thresh_low = NULL, thresh_up = NULL,
                        cutoff = c("horizontal", "vertical", "intermediate")[1], digits = 2,
-                       cumulative = FALSE) {
+                       cumulative = FALSE, quiet = FALSE) {
 
   dd_calc(daily_min=daily_min, daily_max=daily_max, thresh_low=thresh_low, thresh_up=thresh_up,
-          method ="sng_tri", cutoff=cutoff, digits=digits, cumulative=cumulative)
+          method ="sng_tri", cutoff=cutoff, digits=digits, cumulative=cumulative, quiet=quiet)
 }
 
-#' @describeIn dd_calc Compute degree days using the single-sine method
+#' @describeIn dd_calc Estimate degree days using the single-sine method
 #' @export
 
 dd_sng_sine <- function(daily_min, daily_max, thresh_low = NULL, thresh_up = NULL,
                         cutoff = c("horizontal", "vertical", "intermediate")[1], digits = 2,
-                        cumulative = FALSE) {
+                        cumulative = FALSE, quiet = FALSE) {
 
   dd_calc(daily_min=daily_min, daily_max=daily_max, thresh_low=thresh_low, thresh_up=thresh_up,
-          method ="sng_sine", cutoff=cutoff, digits=digits, cumulative=cumulative)
+          method ="sng_sine", cutoff=cutoff, digits=digits, cumulative=cumulative, quiet=quiet)
 }
 
-#' @describeIn dd_calc Compute degree days using the double-triangle method
+#' @describeIn dd_calc Estimate degree days using the double-triangle method
 #' @export
 
 dd_dbl_tri <- function(daily_min, daily_max, nextday_min = daily_min, thresh_low = NULL, thresh_up = NULL,
                        cutoff = c("horizontal", "vertical", "intermediate")[1], digits = 2,
-                       cumulative = FALSE) {
+                       cumulative = FALSE, quiet = FALSE) {
 
   dd_calc(daily_min=daily_min, daily_max=daily_max, nextday_min=nextday_min,
           thresh_low=thresh_low, thresh_up=thresh_up,
-          method ="dbl_tri", cutoff=cutoff, digits=digits, cumulative=cumulative)
+          method ="dbl_tri", cutoff=cutoff, digits=digits, cumulative=cumulative, quiet=quiet)
 }
 
-#' @describeIn dd_calc Compute degree days using the double-sine method
+#' @describeIn dd_calc Estimate degree days using the double-sine method
 #' @export
 
 dd_dbl_sine <- function(daily_min, daily_max, nextday_min = daily_min, thresh_low = NULL, thresh_up = NULL,
                         cutoff = c("horizontal", "vertical", "intermediate")[1], digits = 2,
-                        cumulative = FALSE) {
+                        cumulative = FALSE, quiet = FALSE) {
 
   dd_calc(daily_min=daily_min, daily_max=daily_max, nextday_min=nextday_min,
           thresh_low=thresh_low, thresh_up=thresh_up,
-          method ="dbl_sine", cutoff=cutoff, digits=digits, cumulative=cumulative)
+          method ="dbl_sine", cutoff=cutoff, digits=digits, cumulative=cumulative, quiet=quiet)
 }
 
 #' Determine the case

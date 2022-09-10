@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Compute Degree Days">
-<meta property="og:description" content="Compute degree days from daily min and max temperatures for modeling plant and animal development.">
+<meta property="og:description" content="Compute degree days from daily min and max temperatures for modeling plant and insect development.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">degday</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -79,10 +79,10 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-<p><a href="http://ucanr-igis.github.io/degday" class="external-link"><img src="reference/figures/logo.png" align="right" style="padding:15px; height:200px; width:177px;"></a><strong>degday</strong> provides formulas for estimating <a href="https://en.wikipedia.org/wiki/Growing_degree-day" class="external-link">degree days</a> from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the growth of plants and insects. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as provide a species-specific temperature range in which development occurs.</p>
-<p>Formulas are based on the work by Zalom et al (<a href="#references">1983</a>). These same formulas are used on the <a href="http://ipm.ucanr.edu/WEATHER/" class="external-link">UC Integrated Pest Management</a> (UC IPM) website. See the UC IPM website for additional background on <a href="http://ipm.ucanr.edu/WEATHER/ddconcepts.html" class="external-link">degree days</a>, <a href="http://ipm.ucanr.edu/WEATHER/ddfigindex.html" class="external-link">detailed figures and formulas</a>, and <a href="http://www.ipm.ucdavis.edu/MODELS/" class="external-link">models</a> that predict growth stages of various crops and pests based on degree days.</p>
-<p>degday implements all the formulas in Zalom et al (<a href="#references">1983</a>), including the single and double triangle methods, the single and double sine methods, and the simple average method. All formulas use the horizontal cutoff method. degday does not currently support the vertical cutoff method, nor the corrected sine and triangle methods.</p>
-<p>You might be wondering which of the four estimation methods to use? Most people compute degree days not as an end in itself, but rather to look-up when a development milestone, such as blooming in a plant or larvae emergence in an insect, is expected. Hence you should use whichever method of degree days referenced in the lookup table. When in doubt, use the single-sine method. For more info about the different methods, see Roltsch et al (<a href="#references">1999</a>).</p>
+<p><a href="http://ucanr-igis.github.io/degday" class="external-link"><img src="reference/figures/logo.png" align="right" style="padding:15px; height:200px; width:177px;"></a><strong>degday</strong> provides formulas for estimating <a href="https://en.wikipedia.org/wiki/Growing_degree-day" class="external-link">degree days</a> from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the development of plants and insects, which are strongly correlated with accumulated heat above a certain a temperature. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as a species-dependent temperature range in which growth is possible.</p>
+<p>Formulas are based on the work by Zalom et al (<a href="#references">1983</a>) and McMaster and Wilhelm (<a href="#references">1997</a>). These same formulas are used on the University of California <a href="http://ipm.ucanr.edu/WEATHER/" class="external-link">Integrated Pest Management</a> (UC IPM) website. See the UC IPM website for additional background on <a href="http://ipm.ucanr.edu/WEATHER/ddconcepts.html" class="external-link">degree days</a>, <a href="http://ipm.ucanr.edu/WEATHER/ddfigindex.html" class="external-link">detailed figures and formulas</a>, and <a href="http://www.ipm.ucdavis.edu/MODELS/" class="external-link">models</a> that predict growth stages of various crops and pests based on degree days.</p>
+<p><code>degday</code> implements all formulas from Zalom et al (<a href="#references">1983</a>), including the single and double triangle methods, and the single and double sine methods. All formulas use the horizontal cutoff method. <code>degday</code> does not currently support the vertical cutoff method, nor the corrected sine and triangle methods. The simple average method is based on McMaster and Wilhelm (<a href="#references">1997</a>), which allows for an optional upper threshold and supports the so-called ‘corn’ method for dealing with temperatures below the lower and above the upper thresholds.</p>
+<p>You might be wondering, <em>which of the four estimation methods should I use?</em> Most people compute degree days not as an end in itself, but rather to look-up when a development milestone is predicted to take place, such as blooming for a tree crop, or larvae emergence in an insect. Hence you should use the same method that was used to build the reference table. When in doubt, use the single-sine method. For more info about the different methods, see Roltsch et al (<a href="#references">1999</a>).</p>
 <p>Degree days are sometimes referred to as <em>growing degree days</em>, which generally refers to data that drives models of specifically plant growth. Other terms that are more or less synonymous with degree days are <em>heat units</em> and <em>thermal units</em>. <em>Chill hours</em> is a related concept, but uses accumulated cold to predict plant and insect development rather than accumulated heat. Formulas for computing chill hours and chill portions may be found in <a href="https://cran.r-project.org/package=chillR" class="external-link">chillR</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -172,6 +172,7 @@
 <h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h1>
 <p>Zalom, F.G., P.B. Goodell, L.T. Wilson, W.W. Barnett, and W.J. Bentley. 1983. <em>Degree-days: The calculation and use of heat units in pest management</em>. UC DANR Leaflet 21373. Available from <a href="https://catalog.hathitrust.org/Record/008707238" class="external-link">Hathi Trust</a>.</p>
+<p>McMaster, G. S., and Wilhelm, W. W. 1997. <em>Growing degree-days: one equation, two interpretations</em>. Agricultural and forest meteorology, 87(4), 291-300. Available from <a href="https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=1086&amp;context=usdaarsfacpub" class="external-link">unl.edu</a></p>
 <p>Roltsch, W. J.; Zalom, F. G.; Strawn, A. J.; Strand, J. F.; Pitcairn, M. J. 1999. <em>Evaluation of several degree-day estimation methods in California climates</em>. Int. J. Biometeorol. 42:169-176. <a href="https://doi.org/10.1007/s004840050101" class="external-link uri">https://doi.org/10.1007/s004840050101</a></p>
 </div>
 
@@ -220,9 +221,10 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://ajlyons.r-universe.dev" class="external-link"><img src="https://ajlyons.r-universe.dev/badges/degday" alt="degday status badge"></a></li>
 <li><a href="https://ucanr-igis.github.io/degree-day-challenge/" class="external-link"><img src="https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/badges/degree-day-challenge-passing.svg" alt="degree-day-challenge: passing"></a></li>
+<li><a href="https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 
