@@ -1,22 +1,30 @@
 ## Resubmission
 
-This is a reubmission. In this version I have:
+This is a resubmission. In this version I have:
 
- * added a trailing slash to the following URL in the description:
+* added a trailing slash to the following URL in the README.Rmd and README.md:
      
-     * <https://github.com/ucanr-igis/degday/>
- 
- * committed the update to GitHub
- 
- * checked the package again using [GitHub Actions](https://github.com/UCANR-IGIS/degday/actions)
+  * <https://github.com/ucanr-igis/degday/>
 
-     * There were no ERRORs or WARNINGs, or NOTEs
+## Resubmission
+
+This is a resubmission. In this version I have:
+
+* added a trailing slash to the following URL in the DESCRIPTION:
      
- * checked the package again on R-Hub by running `devtools::check_rhub()` 
+  * <https://github.com/ucanr-igis/degday/>
+ 
+* committed the update to GitHub
+ 
+* checked the package again using [GitHub Actions](https://github.com/UCANR-IGIS/degday/actions)
 
-     * There were no ERRORs or WARNINGs
+  * There were no ERRORs or WARNINGs, or NOTEs
+     
+* checked the package again on R-Hub by running `devtools::check_rhub()` 
 
-     * R-Hub: Notes:
+  * There were no ERRORs or WARNINGs
+
+  * R-Hub: Notes:
         
         Windows Server 2022, R-devel, 64 bit: 
           * 'Found detritus in the temp directory: Found the following files/directories: 'lastMiKTeXException'

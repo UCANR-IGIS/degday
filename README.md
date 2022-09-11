@@ -13,7 +13,7 @@ passing](https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/
 [![R-CMD-check](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-<a href='http://ucanr-igis.github.io/degday'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday**
+<a href='http://ucanr-igis.github.io/degday/'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday**
 provides formulas for estimating [degree
 days](https://en.wikipedia.org/wiki/Growing_degree-day) from daily
 minimum and maximum temperatures. Degree days are commonly used in
