@@ -5,6 +5,14 @@ This is a resubmission. In this version I have:
 * added https and a trailing slash to the following URL in the README.Rmd and README.md:
      
   * <https://github.com/ucanr-igis/degday/>
+  
+* committed the update to GitHub
+
+* ran `check_win_devel()`
+
+  * There were no ERRORs or WARNINGs
+
+  * There was 1 NOTE: New submission
 
 ## Resubmission
 
