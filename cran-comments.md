@@ -2,7 +2,7 @@
 
 This is a resubmission. In this version I have:
 
-* added a trailing slash to the following URL in the README.Rmd and README.md:
+* added https and a trailing slash to the following URL in the README.Rmd and README.md:
      
   * <https://github.com/ucanr-igis/degday/>
 
