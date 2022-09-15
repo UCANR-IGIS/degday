@@ -1,5 +1,6 @@
-# degday 0.4.0 (2022-09-07)
+# degday 0.4.0 (2022-09-07) [![CRAN_Status_Badge](https://img.shields.io/badge/CRAN-published-blue.svg)](https://cran.r-project.org/package=degday)
 
+* Initial release to CRAN
 * `dd_calc()`: added `simp_avg_zero_method` argument for the so-called 'corn' variant of the simple average method
 * `dd_simp_avg()`: new function (convenience wrapper for the simple average method)
 

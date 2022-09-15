@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">degday</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.9000</span>
       </span>
     </div>
 
@@ -88,19 +88,21 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p><code>degday</code> is available on <a href="https://ajlyons.r-universe.dev/" target="_blank" rel="noopener" class="external-link">r-universe</a>. To install it, you can run:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> <span class="fu">c</span>(<span class="at">ajlyons =</span> <span class="st">'https://ajlyons.r-universe.dev'</span>,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">CRAN =</span> <span class="st">'https://cloud.r-project.org'</span>))</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'degday'</span>)</span></code></pre></div>
-<p>Alternately, you can install it directly from <a href="https://github.com/ucanr-igis/degday" target="_blank" rel="noopener" class="external-link">GitHub</a>. (This requires the <code>remotes</code> package plus <a href="https://cran.r-project.org/bin/windows/Rtools/" target="_blank" rel="noopener" class="external-link">RTools</a> for Windows users.)</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"ucanr-igis/degday"</span>)</span></code></pre></div>
+<p><code>degday</code> can be installed from CRAN:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"degday"</span>)</span></code></pre></div>
+<p>The development version of <code>degday</code> is available on <a href="https://ajlyons.r-universe.dev/" target="_blank" rel="noopener" class="external-link">r-universe</a>. To install it, you can run:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> <span class="fu">c</span>(<span class="at">ajlyons =</span> <span class="st">'https://ajlyons.r-universe.dev'</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">CRAN =</span> <span class="st">'https://cloud.r-project.org'</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'degday'</span>)</span></code></pre></div>
+<p>Alternately, you can install the development version directly from <a href="https://github.com/ucanr-igis/degday" target="_blank" rel="noopener" class="external-link">GitHub</a>. (This requires the <code>remotes</code> package plus <a href="https://cran.r-project.org/bin/windows/Rtools/" target="_blank" rel="noopener" class="external-link">RTools</a> for Windows users.)</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"ucanr-igis/degday"</span>)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>To illustrate, we can compute degree days for a sample dataset consisting of one year of minimum and maximum daily temperatures from the <a href="http://ipm.ucanr.edu/calludt.cgi/WXSTATIONDATA?MAP=yolo.html&amp;STN=Esparto.A" class="external-link">Esparto.A</a> CIMIS weather station in Yolo County, California.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ucanr-igis/degday" class="external-link">degday</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ucanr-igis/degday/" class="external-link">degday</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">espartoa_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/espartoa-weather-2020.csv"</span>, package <span class="op">=</span> <span class="st">"degday"</span><span class="op">)</span></span>
@@ -114,11 +116,11 @@
 <span><span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63</span></span>
 <span><span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58</span></span></code></pre></div>
 <p>To compute degree days, we have to tell it a range of temperatures in which development occurs. We’ll select 55.0°F and 93.9°F, which are the lower and upper thresholds for <a href="http://ipm.ucanr.edu/PHENOLOGY/ma-navel_orangeworm.html" class="external-link">Navel Orangeworm</a>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">thresh_low</span> <span class="op">&lt;-</span> <span class="fl">55</span></span>
 <span><span class="va">thresh_up</span> <span class="op">&lt;-</span> <span class="fl">93.9</span></span></code></pre></div>
 <p>The single-triangle and single-sine methods can be computed with <code><a href="reference/dd_calc.html">dd_sng_tri()</a></code> and <code><a href="reference/dd_calc.html">dd_sng_sine()</a></code>. We can add them as columns in our table using <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">espartoa_dd</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sng_tri <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_sng_tri</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, </span>
 <span>                              thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span>,</span>
@@ -137,7 +139,7 @@
 <span><span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58    0.20     0.48</span></span></code></pre></div>
 <p>To compute degree days using the double-triangle and double-sine methods, we need to first add a column to our temperature table for the “day after” minimum temperature. That’s because these methods use the minimum temperature of the next day to better model cooling in the afternoon and evening hours.</p>
 <p>We can add the next-day minimum temperature to our table with a little dplyr.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">espartoa_temp2</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>tmin_next <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lead</a></span><span class="op">(</span><span class="va">tmin</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -150,7 +152,7 @@
 <span><span class="co">#&gt; 5 Esparto.A 2020-01-05   38   63        36</span></span>
 <span><span class="co">#&gt; 6 Esparto.A 2020-01-06   36   58        30</span></span></code></pre></div>
 <p>The double-triangle and double-sine methods can be computed with <code><a href="reference/dd_calc.html">dd_dbl_tri()</a></code> and <code><a href="reference/dd_calc.html">dd_dbl_sine()</a></code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">espartoa_dd2</span> <span class="op">&lt;-</span> <span class="va">espartoa_temp2</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>dbl_tri <span class="op">=</span> <span class="fu"><a href="reference/dd_calc.html">dd_dbl_tri</a></span><span class="op">(</span>daily_min <span class="op">=</span> <span class="va">tmin</span>, daily_max <span class="op">=</span> <span class="va">tmax</span>, nextday_min <span class="op">=</span> <span class="va">tmin_next</span>,</span>
 <span>                              thresh_low <span class="op">=</span> <span class="va">thresh_low</span>, thresh_up <span class="op">=</span> <span class="va">thresh_up</span><span class="op">)</span>,</span>
@@ -183,6 +185,7 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=degday" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/ucanr-igis/degday/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/ucanr-igis/degday/issues/" class="external-link">Report a bug</a></li>
 </ul>
@@ -222,10 +225,12 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
+<li><a href="https://CRAN.R-project.org/package=degday" class="external-link"><img src="https://www.r-pkg.org/badges/version/degday" alt="CRAN status"></a></li>
 <li><a href="https://ajlyons.r-universe.dev" class="external-link"><img src="https://ajlyons.r-universe.dev/badges/degday" alt="degday status badge"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.7083181" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.7083181.svg" alt="DOI"></a></li>
 <li><a href="https://ucanr-igis.github.io/degree-day-challenge/" class="external-link"><img src="https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/badges/degree-day-challenge-passing.svg" alt="degree-day-challenge: passing"></a></li>
 <li><a href="https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 </ul>
 </div>
 

@@ -4,13 +4,16 @@ Compute Degree Days
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-[![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/degday)](https://CRAN.R-project.org/package=degday)
 [![degday status
 badge](https://ajlyons.r-universe.dev/badges/degday)](https://ajlyons.r-universe.dev)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7083181.svg)](https://doi.org/10.5281/zenodo.7083181)
 [![degree-day-challenge:
 passing](https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/badges/degree-day-challenge-passing.svg)](https://ucanr-igis.github.io/degree-day-challenge/)
 [![R-CMD-check](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 <a href='https://ucanr-igis.github.io/degday/'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday**
@@ -63,7 +66,11 @@ hours and chill portions may be found in
 
 ## Installation
 
-`degday` is available on
+`degday` can be installed from CRAN:
+
+    install.packages("degday")
+
+The development version of `degday` is available on
 <a href="https://ajlyons.r-universe.dev/" target="_blank"
 rel="noopener">r-universe</a>. To install it, you can run:
 
@@ -71,7 +78,7 @@ rel="noopener">r-universe</a>. To install it, you can run:
                       CRAN = 'https://cloud.r-project.org'))
     install.packages('degday')
 
-Alternately, you can install it directly from
+Alternately, you can install the development version directly from
 <a href="https://github.com/ucanr-igis/degday" target="_blank"
 rel="noopener">GitHub</a>. (This requires the `remotes` package plus
 <a href="https://cran.r-project.org/bin/windows/Rtools/" target="_blank"

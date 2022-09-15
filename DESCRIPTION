@@ -1,8 +1,8 @@
 Type: Package
 Package: degday
 Title: Compute Degree Days
-Version: 0.4.0
-Date: 2022-09-09
+Version: 0.4.0.9000
+Date: 2022-09-15
 Authors@R: c(
     person("Andy", "Lyons", , "andlyons@ucanr.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7505-6709")),
