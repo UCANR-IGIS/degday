@@ -1,0 +1,6 @@
+authors:
+  footer:
+    roles: [cre, fnd]
+    text: "Developed by"
+  sidebar:
+    roles: [aut, ctb]

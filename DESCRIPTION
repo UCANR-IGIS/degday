@@ -6,6 +6,7 @@ Date: 2022-09-15
 Authors@R: c(
     person("Andy", "Lyons", , "andlyons@ucanr.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7505-6709")),
+    person("Frank", "Zalom", , "fgzalom@ucdavis.edu", role = "ctb"),
     person("Regents of the University of California", role = "cph")
   )
 Description: Compute degree days from daily min and max temperatures for

@@ -15,12 +15,14 @@ knitr::opts_chunk$set(
 ```
 
 <!-- badges: start -->
+
 [![CRAN status](https://www.r-pkg.org/badges/version/degday)](https://CRAN.R-project.org/package=degday) 
 [![degday status badge](https://ajlyons.r-universe.dev/badges/degday)](https://ajlyons.r-universe.dev) 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7083181.svg)](https://doi.org/10.5281/zenodo.7083181)
 [![degree-day-challenge: passing](https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/badges/degree-day-challenge-passing.svg)](https://ucanr-igis.github.io/degree-day-challenge/) 
 [![R-CMD-check](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml) 
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable) 
+
 <!-- badges: end -->
 
 <a href='https://ucanr-igis.github.io/degday/'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday** provides formulas for estimating [degree days](https://en.wikipedia.org/wiki/Growing_degree-day) from daily minimum and maximum temperatures. Degree days are commonly used in agriculture to predict the development of plants and insects, which are strongly correlated with accumulated heat above a certain a temperature. To use the formulas, you must pass a record of daily minimum and maximum temperatures, as well as a species-dependent temperature range in which growth is possible.
