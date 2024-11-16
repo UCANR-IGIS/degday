@@ -6,7 +6,9 @@ Compute Degree Days
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/degday)](https://CRAN.R-project.org/package=degday)
-[![degday status
+[![Monthly
+downloads](https://cranlogs.r-pkg.org/badges/degday?color=brightgreen)](https://CRAN.R-project.org/package=degday)
+[![R-Universe status
 badge](https://ajlyons.r-universe.dev/badges/degday)](https://ajlyons.r-universe.dev)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7083181.svg)](https://doi.org/10.5281/zenodo.7083181)
 [![degree-day-challenge:
@@ -14,6 +16,7 @@ passing](https://raw.githubusercontent.com/ucanr-igis/degree-day-challenge/main/
 [![R-CMD-check](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UCANR-IGIS/degday/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+
 <!-- badges: end -->
 
 <a href='https://ucanr-igis.github.io/degday/'><img src='man/figures/logo.png' align="right" style="padding:15px; height:200px; width:177px;"/></a>**degday**
